@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Welcome | BoostPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #d3d2ff; /* light gray */
+      color: #4a4a8c; /* dark purple */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 3rem;
+      background-color: #6145ff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #ffffff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    nav ul li a {
+      color: inherit;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: #7b73e8;
+      color: white;
+    }
+
+    /* Main content container */
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4rem 6rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 4rem;
+    }
+
+    /* Left text section */
+    .left-section {
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .left-section h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: #4a4a8c;
+      letter-spacing: 2px;
+    }
+
+    .left-section .subtitle {
+      color: #f0a500; /* gold */
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    .left-section .username {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #4a4a8c;
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+
+    .left-section p {
+      background-color: rgba(255 255 255 / 0.7);
+      padding: 1rem 1.3rem;
+      border-radius: 10px;
+      color: #858585;
+      font-weight: 500;
+      font-size: 1rem;
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    .left-section button {
+      background-color: #5c5ab9;
+      border: none;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.8rem 2.4rem;
+      border-radius: 20px;
+      cursor: pointer;
+      width: 130px;
+      margin-top: 24px;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .left-section button:hover,
+    .left-section button:focus {
+      background-color: #7b73e8;
+      color: white;
+      outline: none;
+    }
+
+    /* Right illustration */
+    .right-section {
+      flex: 1;
+      max-width: 900px;
+      user-select: none;
+    }
+
+    .right-section img {
+      max-width: 150%;
+      height: auto;
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .container {
+        flex-direction: column;
+        padding: 2rem 2rem;
+      }
+      .left-section {
+        max-width: 100%;
+        text-align: center;
+      }
+      .left-section h1 {
+        font-size: 2.6rem;
+      }
+      .right-section {
+        margin-top: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav aria-label="Primary navigation">
+    <div class="logo" aria-label="Site logo">LinkHive</div>
+    <ul>
+      <li><a href="index.html" tabindex="0">Home</a></li>
+      <li><a href="#about" tabindex="0">About</a></li>
+    </ul>
+  </nav>
+
+  <main class="container" role="main">
+    <section class="left-section" aria-labelledby="welcomeTitle">
+      <h1 id="welcomeTitle">WELCOME</h1>
+      <div class="username" id="userName">User</div>
+      <p>
+        Your gateway to smarter connections and seamless collaboration. We're excited to have you on board—get ready to explore powerful tools designed to help you link, share, and grow effortlessly. Let’s create something amazing together!
+      </p>
+      <button onclick="goToDashboard()" aria-label="Continue to dashboard">Continue</button>
+    </section>
+    <section class="right-section" aria-hidden="true">
+      <img src="BG.png" alt="Welcome illustration" />
+    </section>
+  </main>
+
+  <script>
+    // Get first and last name from URL and display them
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const firstName = urlParams.get('firstName');
+      const lastName = urlParams.get('lastName');
+      const userNameElement = document.getElementById('userName');
+
+      if (firstName && lastName) {
+        userNameElement.textContent = `${firstName} ${lastName}`;
+      }
+    });
+
+    function goToDashboard() {
+      alert("Dashboard is under construction!");
+    }
+  </script>
+</body>
+
+</html>

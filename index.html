@@ -1,0 +1,235 @@
+<head> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover and sign up for our powerful productivity tool – boost your workflow and achieve more every day." />
+  <title>BoostPro - Productivity Made Simple</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyACz1MShytCZXOucu99d5Cym__NmvGQz0w",
+      authDomain: "linkhive-71243.firebaseapp.com",
+      projectId: "linkhive-71243",
+      storageBucket: "linkhive-71243.appspot.com",
+      messagingSenderId: "674968108997",
+      appId: "1:674968108997:web:7e5c916431f98f429cd5ac",
+      measurementId: "G-S0SFLYB0R4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const signupForm = document.getElementById('signup-form');
+      const submitButton = signupForm.querySelector('button[type="submit"]');
+
+      signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+
+        const firstName = document.getElementById('first-name').value.trim();
+        const middleName = document.getElementById('middle-name').value.trim();
+        const lastName = document.getElementById('last-name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+
+        if (!firstName || !lastName || !email || !phone) {
+          alert("All fields are required!");
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit";
+          return;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+          alert("Please enter a valid email address.");
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit";
+          return;
+        }
+
+        try {
+          const docRef = await addDoc(collection(db, "signups"), {
+            firstName,
+            middleName,
+            lastName,
+            email,
+            phone,
+            timestamp: new Date()
+          });
+          alert(`Signup successful! Document ID: ${docRef.id}`);
+          // Redirect to success page after signup
+          window.location.href = `success.html?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`;
+        } catch (error) {
+          console.error("Error adding document: ", error);
+          alert("Error: " + error.message);
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit";
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Unlock Your Productivity Potential</h1>
+        <p>LinkHive helps you take control of your workflow with powerful, easy-to-use tools.</p>
+        <button class="cta-button" onclick="showSignup()">Join Now</button>
+      </div>
+
+      <div class="hero-image">
+        <img id="logoImage" src="Logo.png" alt="BoostPro Logo" />
+        <!-- Updated to show feedback modal -->
+        <button class="feedback" onclick="showFeedback()">Feedback</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="features" aria-label="Features">
+      <h2>Why Choose LinkHive?</h2>
+      <div class="feature-cards">
+        <div class="card">
+          <div class="card-image">
+            <img src="Task.png" alt="Task Management" />
+          </div>
+          <h3>Task Management</h3>
+          <p>Organize and prioritize your tasks effortlessly.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-image">
+            <img src="Time.jpeg" alt="Time Tracking" />
+          </div>
+          <h3>Time Tracking</h3>
+          <p>Keep tabs on how you spend every minute of your workday.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-image">
+            <img src="Collaboration.png" alt="Collaboration" />
+          </div>
+          <h3>Collaboration</h3>
+          <p>Work seamlessly with your team from anywhere.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="floating-signup" id="signup">
+    <button class="close-btn" onclick="closeSignup()">×</button>
+    <h2>Get Started Today</h2>
+    <form id="signup-form">
+      <label for="first-name">First Name</label>
+      <input type="text" id="first-name" name="first-name" required />
+
+      <label for="middle-name">Middle Name</label>
+      <input type="text" id="middle-name" name="middle-name" />
+
+      <label for="last-name">Last Name</label>
+      <input type="text" id="last-name" name="last-name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" required />
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <!-- Feedback Modal Overlay -->
+  <div class="feedback-overlay" id="feedbackOverlay" onclick="closeFeedback()"></div>
+
+  <!-- Feedback Modal -->
+  <div class="feedback-modal" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <button class="feedback-close" onclick="closeFeedback()" aria-label="Close feedback modal">&times;</button>
+    <h2 id="feedbackTitle">User Feedback</h2>
+
+    <div id="feedbackList">
+      <!-- JS will insert feedback items here -->
+    </div>
+  </div>
+
+  <footer>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#signup">Sign Up</a>
+      <a href="#">Privacy Policy</a>
+    </nav>
+    <p>&copy; 2025 BoostPro. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function showSignup() {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('signup').style.display = 'block';
+    }
+
+    function closeSignup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('signup').style.display = 'none';
+    }
+
+    // Sample feedback data
+    const feedbackData = [
+      { name: "Alice", rating: 5, comment: "Absolutely love BoostPro! It made my workflow so smooth." },
+      { name: "Bob", rating: 4, comment: "Great tool with useful features, though UI can be improved." },
+      { name: "Charlie", rating: 3, comment: "It’s decent but sometimes slow when tracking time." },
+      { name: "Diana", rating: 5, comment: "Excellent collaboration tools. Our team productivity went up!" },
+      { name: "Ethan", rating: 4, comment: "Good value for the price. Task management is top-notch." },
+      { name: "Fiona", rating: 5, comment: "Love the clean design and easy-to-use interface." },
+      { name: "George", rating: 2, comment: "Had issues syncing tasks, but support was helpful." },
+      { name: "Hannah", rating: 4, comment: "Pretty good, though I wish time tracking was more detailed." },
+      { name: "Ian", rating: 5, comment: "BoostPro really helped me stay focused and organized." },
+      { name: "Jessica", rating: 3, comment: "It’s okay but some features need more polish." }
+    ];
+
+    function renderStars(rating) {
+      let stars = "";
+      for (let i = 1; i <= 5; i++) {
+        stars += i <= rating ? "★" : "☆";
+      }
+      return `<span class="stars">${stars}</span>`;
+    }
+
+    function showFeedback() {
+      const feedbackList = document.getElementById("feedbackList");
+      feedbackList.innerHTML = ""; // Clear previous content
+
+      feedbackData.forEach(feedback => {
+        const feedbackEntry = document.createElement("div");
+        feedbackEntry.className = "user-feedback";
+        feedbackEntry.innerHTML = `
+          <div class="user-name">${feedback.name} ${renderStars(feedback.rating)}</div>
+          <div class="user-comment">${feedback.comment}</div>
+        `;
+        feedbackList.appendChild(feedbackEntry);
+      });
+
+      document.getElementById("feedbackOverlay").style.display = "block";
+      document.getElementById("feedbackModal").style.display = "block";
+    }
+
+    function closeFeedback() {
+      document.getElementById("feedbackOverlay").style.display = "none";
+      document.getElementById("feedbackModal").style.display = "none";
+    }
+  </script>
+</body>
+
+</html>
